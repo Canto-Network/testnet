@@ -1,16 +1,16 @@
 ## Canto 7701 Testnet
 ### Overview
-Genesis file:
-- `wget https://raw.githubusercontent.com/Canto-Network/testnet/main/genesis.json`
-
-Public RPC:
--  `canto-testnet.plexnode.wtf`
+- Genesis file: `https://raw.githubusercontent.com/Canto-Network/testnet/main/genesis.json`
+- Peer node (Plex): `31ccdf2f81f6b43cbd71b11a8b65a5cc7a3fd9ec@143.42.122.236:26656`
+- Public RPC: `canto-testnet.plexnode.wtf`
 
 ### Node Setup
 
 This guide is based on the [Quickstart Guide](https://docs.canto.io/canto-node/validators/quickstart-guide) for Canto mainnet validator nodes. It is adapted to use the testnet genesis file from this repo and the correct testnet chain ID (7701).
 
 Note that this testnet was launched with the [v5.0.0 Canto binary](https://github.com/Canto-Network/Canto/tree/v5.0.0). You must start with this binary if syncing from genesis; otherwise, use the latest binary.
+
+**Instructions tested 19/05/2023.**
 
 #### 1. Install Dependencies
 
@@ -35,7 +35,7 @@ make install
 sudo mv $HOME/go/bin/cantod /usr/bin/
 ```
 
-Generate and store keys:
+Optionally, for a validating node, generate and store keys:
 
 ```sh
 cantod keys add <key_name>
@@ -60,7 +60,7 @@ Replace `<moniker>` with whatever you'd like to name your validator.
 
 ```sh
 # Add seed peer to config.toml
-sed -i 's/seeds = ""/seeds = "TBD"/g' $HOME/.cantod/config/config.toml
+sed -i 's/persistent_peers = ""/persistent_peers = "31ccdf2f81f6b43cbd71b11a8b65a5cc7a3fd9ec@143.42.122.236:26656"/g' $HOME/.cantod/config/config.toml
 
 # Set minimum gas price in app.toml
 sed -i 's/minimum-gas-prices = "0acanto"/minimum-gas-prices = "0.0001acanto"/g' $HOME/.cantod/config/app.toml
@@ -112,11 +112,9 @@ sudo systemctl start cantod
 journalctl -u cantod -f
 ```
 
-You should then get several lines of log files, which may include an `INVALIDARGUMENT` error causing the service to exit. This is expected; `Ctrl + C` out and follow the next steps.
-
 #### 7. Create Validator Transaction
 
-Modify the following items below, removing the `<>`
+For a validating node, create the validator transaction, modifying the following items:
 
 * `<KEY_NAME>` should be the same as `<key_name>` when you followed the steps above in creating or restoring your key.
 * `<VALIDATOR_NAME>` is whatever you'd like to name your node
